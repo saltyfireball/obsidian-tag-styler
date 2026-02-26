@@ -1,0 +1,314 @@
+/* ============================================================================
+   Tag Styler - Plugin Styles
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   Settings layout
+   --------------------------------------------------------------------------- */
+
+.ts-hint {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	margin-bottom: 1em;
+}
+
+.ts-muted {
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.ts-empty-message {
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.ts-remove-btn {
+	color: var(--text-error);
+}
+
+/* ---------------------------------------------------------------------------
+   Tag list
+   --------------------------------------------------------------------------- */
+
+.ts-tag-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.ts-tag-item {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 12px 14px;
+	background: var(--background-secondary);
+	border-radius: 12px;
+	border: 1px solid var(--background-modifier-border);
+}
+
+.ts-tag-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.ts-tag-preview {
+	flex: 1 1 0;
+	min-width: 140px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 14px;
+	border-radius: 999px;
+	background: var(--background-modifier-hover);
+	border: 1px solid var(--background-modifier-border);
+	color: var(--text-normal);
+	font-size: 0.95em;
+	word-break: break-word;
+}
+
+.ts-tag-controls {
+	display: none;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+}
+
+.ts-tag-actions {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: auto;
+	flex-wrap: wrap;
+}
+
+.ts-tag-usage {
+	background: color-mix(
+		in srgb,
+		var(--interactive-accent) 20%,
+		var(--background-primary)
+	);
+	color: var(--text-normal);
+	padding: 2px 10px;
+	border-radius: 999px;
+	font-size: 0.8em;
+	letter-spacing: 0.02em;
+	border: 1px solid transparent;
+}
+
+.ts-tag-actions button {
+	min-width: 64px;
+	height: 32px;
+	font-size: 0.85em;
+	border-radius: 6px;
+}
+
+.ts-tag-control {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	width: 100%;
+}
+
+.ts-tag-control > label {
+	font-size: 0.85em;
+	color: var(--text-muted);
+	letter-spacing: 0.04em;
+}
+
+.ts-tag-input-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+.ts-tag-size-input {
+	min-width: 140px;
+	max-width: 200px;
+	padding: 6px 8px;
+	border-radius: 4px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-family: var(--font-monospace);
+	font-size: 0.85em;
+}
+
+/* ---------------------------------------------------------------------------
+   Color picker (reusable component, ts- prefix)
+   --------------------------------------------------------------------------- */
+
+.ts-color-picker {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	width: 100%;
+	max-width: 520px;
+}
+
+.ts-color-picker-label {
+	font-size: 0.85em;
+	color: var(--text-muted);
+}
+
+.ts-color-picker-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.ts-color-swatch-wrapper {
+	position: relative;
+	width: 36px;
+	height: 36px;
+	min-width: 36px;
+}
+
+.ts-color-native-input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+	border: none;
+	padding: 0;
+}
+
+.ts-color-swatch {
+	display: block;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	border: 2px solid var(--background-modifier-border);
+	cursor: pointer;
+	transition: border-color 0.15s ease, transform 0.1s ease;
+	pointer-events: none;
+}
+
+.ts-color-swatch-wrapper:hover .ts-color-swatch {
+	border-color: var(--interactive-accent);
+	transform: scale(1.05);
+}
+
+.ts-color-swatch:focus-visible {
+	outline: none;
+	box-shadow: 0 0 0 3px var(--interactive-accent);
+}
+
+.ts-color-swatch-empty {
+	background-image:
+		linear-gradient(45deg, var(--background-modifier-border) 25%, transparent 25%),
+		linear-gradient(-45deg, var(--background-modifier-border) 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, var(--background-modifier-border) 75%),
+		linear-gradient(-45deg, transparent 75%, var(--background-modifier-border) 75%);
+	background-size: 8px 8px;
+	background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+.ts-color-text-input {
+	flex: 1;
+	min-width: 0;
+	max-width: 280px;
+	padding: 6px 10px;
+	border-radius: 6px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 0.85em;
+	font-family: var(--font-monospace);
+}
+
+.ts-color-clear-btn {
+	width: 28px;
+	height: 28px;
+	min-width: 28px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-muted);
+	cursor: pointer;
+	font-size: 0.75em;
+	line-height: 1;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.ts-color-clear-btn:hover {
+	color: var(--text-error);
+	border-color: var(--text-error);
+}
+
+/* Opacity slider row */
+
+.ts-color-opacity-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 4px;
+}
+
+.ts-color-opacity-label {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	min-width: 48px;
+}
+
+.ts-color-opacity-slider {
+	-webkit-appearance: none;
+	appearance: none;
+	flex: 1;
+	max-width: 200px;
+	height: 6px;
+	border-radius: 3px;
+	background: linear-gradient(
+		to right,
+		var(--interactive-accent) 0%,
+		var(--interactive-accent) var(--slider-progress, 100%),
+		var(--background-modifier-border) var(--slider-progress, 100%),
+		var(--background-modifier-border) 100%
+	);
+	outline: none;
+	cursor: pointer;
+}
+
+.ts-color-opacity-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--interactive-accent);
+	border: 2px solid var(--background-primary);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	transition: transform 0.1s ease;
+}
+
+.ts-color-opacity-slider::-webkit-slider-thumb:hover {
+	transform: scale(1.15);
+}
+
+.ts-color-opacity-slider::-moz-range-thumb {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--interactive-accent);
+	border: 2px solid var(--background-primary);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+}
+
+.ts-color-opacity-value {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	min-width: 36px;
+	text-align: right;
+	font-family: var(--font-monospace);
+}
