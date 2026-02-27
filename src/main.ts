@@ -1,7 +1,6 @@
 import {
 	Plugin,
 	PluginSettingTab,
-	Setting,
 	type App,
 	type CachedMetadata,
 	type MetadataCache,
@@ -45,6 +44,7 @@ export default class TagStylerPlugin extends Plugin {
 	async onload(): Promise<void> {
 		await this.loadSettings();
 
+		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic CSS injection for per-tag styles
 		this.styleEl = document.createElement("style");
 		this.styleEl.id = "tag-styler-css";
 		document.head.appendChild(this.styleEl);
@@ -61,7 +61,9 @@ export default class TagStylerPlugin extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
 		const data = await this.loadData();
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
 		if (!Array.isArray(this.settings.tagStyles)) {
 			this.settings.tagStyles = [];
@@ -113,8 +115,10 @@ function getAllVaultTagCounts(app: App): Map<string, number> {
 		const fileTags = cache.tags || [];
 		fileTags.forEach((tag: TagCache) => collectTag(tag.tag));
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- frontmatter returns any
 		const frontmatterTags = cache.frontmatter?.tags;
 		if (Array.isArray(frontmatterTags)) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- frontmatter values are any
 			frontmatterTags.forEach((tag) => collectTag(tag));
 		} else if (typeof frontmatterTags === "string") {
 			frontmatterTags
@@ -155,7 +159,6 @@ class TagStylerSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl).setName("Tag styler").setHeading();
 		containerEl.createEl("p", {
 			text: "Customize the appearance of tags in your vault. Set text color, background color (with opacity), and font size for each tag.",
 			cls: "ts-hint",
@@ -240,11 +243,13 @@ class TagStylerSettingTab extends PluginSettingTab {
 				const header = item.createDiv("ts-tag-header");
 				const preview = header.createDiv("ts-tag-preview");
 				preview.textContent = `#${tagName}`;
-				preview.style.color = style.textColor || "";
-				preview.style.backgroundColor = style.backgroundColor || "";
-				preview.style.fontSize = style.fontSize
-					? normalizeFontSize(style.fontSize)
-					: "";
+				preview.setCssStyles({ color: style.textColor || "" });
+				preview.setCssStyles({ backgroundColor: style.backgroundColor || "" });
+				preview.setCssStyles({
+					fontSize: style.fontSize
+						? normalizeFontSize(style.fontSize)
+						: "",
+				});
 
 				const actions = header.createDiv("ts-tag-actions");
 				actions.createEl("span", {
@@ -254,11 +259,11 @@ class TagStylerSettingTab extends PluginSettingTab {
 
 				const editButton = actions.createEl("button", { text: "Edit" });
 				const controls = item.createDiv("ts-tag-controls");
-				controls.style.display = "none";
+				controls.addClass("ts-tag-controls-hidden");
 
 				editButton.addEventListener("click", () => {
-					const isHidden = controls.style.display === "none";
-					controls.style.display = isHidden ? "flex" : "none";
+					const isHidden = controls.hasClass("ts-tag-controls-hidden");
+					controls.toggleClass("ts-tag-controls-hidden", !isHidden);
 					editButton.textContent = isHidden ? "Hide" : "Edit";
 				});
 
@@ -267,15 +272,16 @@ class TagStylerSettingTab extends PluginSettingTab {
 						text: "Remove",
 						cls: "ts-remove-btn",
 					});
-					removeButton.addEventListener("click", async () => {
+					removeButton.addEventListener("click", () => {
 						const target = getTagStyle(tagName);
 						if (!target) return;
 						const index = tagStyles.indexOf(target);
 						if (index !== -1) {
 							tagStyles.splice(index, 1);
 						}
-						await saveTagStyles();
-						void renderTagList(mergedTagNames, tagCounts);
+						void saveTagStyles().then(() => {
+							void renderTagList(mergedTagNames, tagCounts);
+						});
 					});
 				}
 
@@ -284,12 +290,12 @@ class TagStylerSettingTab extends PluginSettingTab {
 					container: controls,
 					label: "Text color",
 					value: style.textColor,
-					onChange: async (value) => {
+					onChange: (value) => {
 						const target = ensureTagStyle(tagName);
 						target.textColor = value;
-						preview.style.color = value || "";
+						preview.setCssStyles({ color: value || "" });
 						maybeRemoveEmptyTagStyle(tagName);
-						await saveTagStyles();
+						void saveTagStyles();
 					},
 				});
 
@@ -298,12 +304,12 @@ class TagStylerSettingTab extends PluginSettingTab {
 					container: controls,
 					label: "Background color",
 					value: style.backgroundColor,
-					onChange: async (value) => {
+					onChange: (value) => {
 						const target = ensureTagStyle(tagName);
 						target.backgroundColor = value;
-						preview.style.backgroundColor = value || "";
+						preview.setCssStyles({ backgroundColor: value || "" });
 						maybeRemoveEmptyTagStyle(tagName);
-						await saveTagStyles();
+						void saveTagStyles();
 					},
 				});
 
@@ -316,15 +322,17 @@ class TagStylerSettingTab extends PluginSettingTab {
 					value: style.fontSize || "",
 					placeholder: "e.g. 14px, 1.2em",
 					cls: "ts-tag-size-input",
-				}) as HTMLInputElement;
-				sizeInput.addEventListener("change", async () => {
+				});
+				sizeInput.addEventListener("change", () => {
 					const target = ensureTagStyle(tagName);
 					target.fontSize = sizeInput.value.trim();
-					preview.style.fontSize = target.fontSize
-						? normalizeFontSize(target.fontSize)
-						: "";
+					preview.setCssStyles({
+						fontSize: target.fontSize
+							? normalizeFontSize(target.fontSize)
+							: "",
+					});
 					maybeRemoveEmptyTagStyle(tagName);
-					await saveTagStyles();
+					void saveTagStyles();
 				});
 			});
 		};

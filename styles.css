@@ -69,10 +69,14 @@
 }
 
 .ts-tag-controls {
-	display: none;
+	display: flex;
 	flex-direction: column;
 	gap: 12px;
 	width: 100%;
+}
+
+.ts-tag-controls-hidden {
+	display: none;
 }
 
 .ts-tag-actions {
