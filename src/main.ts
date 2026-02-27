@@ -1,6 +1,7 @@
 import {
 	Plugin,
 	PluginSettingTab,
+	Setting,
 	type App,
 	type CachedMetadata,
 	type MetadataCache,
@@ -154,7 +155,7 @@ class TagStylerSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Tag Styler" });
+		new Setting(containerEl).setName("Tag styler").setHeading();
 		containerEl.createEl("p", {
 			text: "Customize the appearance of tags in your vault. Set text color, background color (with opacity), and font size for each tag.",
 			cls: "ts-hint",
