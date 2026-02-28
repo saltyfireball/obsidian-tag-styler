@@ -39,24 +39,22 @@ type MetadataCacheWithTags = MetadataCache & {
 
 export default class TagStylerPlugin extends Plugin {
 	settings: TagStylerSettings = DEFAULT_SETTINGS;
-	private styleEl: HTMLStyleElement | null = null;
+	private styleSheet: CSSStyleSheet | null = null;
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
 
-		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic CSS injection for per-tag styles
-		this.styleEl = document.createElement("style");
-		this.styleEl.id = "tag-styler-css";
-		document.head.appendChild(this.styleEl);
+		this.styleSheet = new CSSStyleSheet();
+		document.adoptedStyleSheets = [...document.adoptedStyleSheets, this.styleSheet];
 		this.updateCSS();
 
 		this.addSettingTab(new TagStylerSettingTab(this.app, this));
 	}
 
 	onunload(): void {
-		if (this.styleEl) {
-			this.styleEl.remove();
-			this.styleEl = null;
+		if (this.styleSheet) {
+			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => s !== this.styleSheet);
+			this.styleSheet = null;
 		}
 	}
 
@@ -73,8 +71,8 @@ export default class TagStylerPlugin extends Plugin {
 	}
 
 	updateCSS(): void {
-		if (!this.styleEl) return;
-		this.styleEl.textContent = generateAllTagCSS(this.settings.tagStyles);
+		if (!this.styleSheet) return;
+		this.styleSheet.replaceSync(generateAllTagCSS(this.settings.tagStyles));
 	}
 }
 
