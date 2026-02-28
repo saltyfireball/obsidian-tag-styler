@@ -61,10 +61,8 @@ export default class TagStylerPlugin extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
-		const data = await this.loadData();
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+		const data = (await this.loadData()) as Partial<TagStylerSettings> | null;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, data ?? {});
 		if (!Array.isArray(this.settings.tagStyles)) {
 			this.settings.tagStyles = [];
 		}
@@ -115,11 +113,9 @@ function getAllVaultTagCounts(app: App): Map<string, number> {
 		const fileTags = cache.tags || [];
 		fileTags.forEach((tag: TagCache) => collectTag(tag.tag));
 
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- frontmatter returns any
-		const frontmatterTags = cache.frontmatter?.tags;
+		const frontmatterTags: unknown = cache.frontmatter?.tags;
 		if (Array.isArray(frontmatterTags)) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- frontmatter values are any
-			frontmatterTags.forEach((tag) => collectTag(tag));
+			frontmatterTags.forEach((tag: unknown) => collectTag(typeof tag === "string" ? tag : String(tag)));
 		} else if (typeof frontmatterTags === "string") {
 			frontmatterTags
 				.split(",")
