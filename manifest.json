@@ -1,7 +1,7 @@
 {
 	"id": "tag-styler",
 	"name": "Tag Styler",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"minAppVersion": "1.0.0",
 	"description": "Customize the appearance of tags in your vault. Set text color, background color, and font size for individual tags with full opacity control.",
 	"author": "saltyfireball",
