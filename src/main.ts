@@ -126,9 +126,9 @@ function getAllVaultTagCounts(app: App): Map<string, number> {
 	return tagCounts;
 }
 
-async function getAllVaultTagCountsDeep(
+function getAllVaultTagCountsDeep(
 	app: App,
-): Promise<{ tagNames: string[]; tagCounts: Map<string, number> }> {
+): { tagNames: string[]; tagCounts: Map<string, number> } {
 	const tagCounts = getAllVaultTagCounts(app);
 	const tagNames = Array.from(tagCounts.keys()).sort((a, b) =>
 		a.localeCompare(b),
@@ -164,10 +164,10 @@ class TagStylerSettingTab extends PluginSettingTab {
 		const renderId = Date.now();
 		this.lastRenderId = renderId;
 
-		const renderTagList = async (
+		const renderTagList = (
 			tagNames: string[],
 			tagCounts: Map<string, number>,
-		) => {
+		): void => {
 			if (this.lastRenderId !== renderId) return;
 			tagList.empty();
 
@@ -274,7 +274,7 @@ class TagStylerSettingTab extends PluginSettingTab {
 							tagStyles.splice(index, 1);
 						}
 						void saveTagStyles().then(() => {
-							void renderTagList(mergedTagNames, tagCounts);
+							renderTagList(mergedTagNames, tagCounts);
 						});
 					});
 				}
@@ -331,15 +331,13 @@ class TagStylerSettingTab extends PluginSettingTab {
 			});
 		};
 
-		void getAllVaultTagCountsDeep(this.app).then(({ tagNames, tagCounts }) => {
-			void renderTagList(tagNames, tagCounts);
-			if (tagNames.length <= 1) {
-				window.setTimeout(() => {
-					void getAllVaultTagCountsDeep(this.app).then((retryResult) => {
-						void renderTagList(retryResult.tagNames, retryResult.tagCounts);
-					});
-				}, 1200);
-			}
-		});
+		const { tagNames, tagCounts } = getAllVaultTagCountsDeep(this.app);
+		renderTagList(tagNames, tagCounts);
+		if (tagNames.length <= 1) {
+			window.setTimeout(() => {
+				const retryResult = getAllVaultTagCountsDeep(this.app);
+				renderTagList(retryResult.tagNames, retryResult.tagCounts);
+			}, 1200);
+		}
 	}
 }
