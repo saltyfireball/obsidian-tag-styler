@@ -21,20 +21,35 @@ Customize the appearance of tags in your Obsidian vault. Set text color, backgro
 
 ## Installation
 
-### From Obsidian Community Plugins
+### Obsidian Community Plugin (pending)
 
-**Might not be approved yet**
+This plugin has been submitted for review to the Obsidian community plugin directory. Once approved, you will be able to install it directly from **Settings > Community plugins > Browse** by searching for "Tag Styler".
 
-1. Open **Settings** > **Community Plugins**
-2. Search for **Tag Styler**
-3. Click **Install**, then **Enable**
+### Using BRAT
 
-### Manual Installation
+You can install this plugin right now using the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin:
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](../../releases/latest)
-2. Create a folder called `tag-styler` in your vault's `.obsidian/plugins/` directory
-3. Copy the downloaded files into that folder
-4. Restart Obsidian and enable the plugin in **Settings** > **Community Plugins**
+1. Install BRAT from **Settings > Community plugins > Browse** (search for "BRAT" by TfTHacker)
+2. Open the BRAT settings
+3. Under the **Beta plugins** section, click **Add beta plugin**
+
+   ![BRAT beta plugin list](assets/brat_example_beta_plugin_list.png)
+
+4. In the overlay, enter this plugin's repository: `https://github.com/saltyfireball/obsidian-tag-styler` (or just `saltyfireball/obsidian-tag-styler`)
+
+   ![BRAT add beta plugin](assets/brat_example_beta_modal.png)
+
+5. Leave the version set to latest
+
+   ![BRAT beta plugin filled](assets/brat_example_beta_modal_filled.png)
+
+6. Click **Add plugin**
+
+### Manual
+
+1. Download the latest release from the [Releases](https://github.com/saltyfireball/obsidian-tag-styler/releases) page
+2. Copy `main.js`, `manifest.json`, and `styles.css` into your vault's `.obsidian/plugins/tag-styler/` directory
+3. Enable the plugin in **Settings > Community plugins**
 
 ## Usage
 
